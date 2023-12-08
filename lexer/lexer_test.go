@@ -1,27 +1,64 @@
 package lexer
 
 import (
-	"testing"
+    "testing"
 
-	"github.com/JakeNorman007/interpreter/token"
+    "github.com/JakeNorman007/interpreter/token"
 )
 
 func TestNextToken(t *testing.T){
-    input := `=+(){},;`
+    input := `let five = 5;
+
+              let ten = 10;
+
+              let add = fn(x,y) {
+                x + y;
+              };
+
+              let result = add(five, ten);` 
 
     tests := []struct{
         expectedType    token.TokenType
         expectedLiteral string
     }{
+        {token.LET, "let"},
+        {token.IDENT, "five"},
         {token.ASSIGN, "="},
-        {token.PLUS, "+"},
+        {token.INT, "5"},
+        {token.SEMICOLON, ";"},
+        {token.LET, "let"},
+        {token.IDENT, "ten"},
+        {token.ASSIGN, "="},
+        {token.INT, "10"},
+        {token.SEMICOLON, ";"},
+        {token.LET, "let"},
+        {token.IDENT, "add"},
+        {token.ASSIGN, "="},
+        {token.FUNCTION, "fn"},
         {token.LEFTPAREN, "("},
+        {token.IDENT, "x"},
+        {token.COMMA, ","},
+        {token.IDENT, "y"},
         {token.RIGHTPAREN, ")"},
         {token.LEFTBRACE, "{"},
+        {token.IDENT, "x"},
+        {token.PLUS, "+"},
+        {token.IDENT, "y"},
+        {token.SEMICOLON, ";"},
         {token.RIGHTBRACE, "}"},
+        {token.SEMICOLON, ";"},
+        {token.LET, "let"},
+        {token.IDENT, "result"},
+        {token.ASSIGN, "="},
+        {token.IDENT, "add"},
+        {token.LEFTPAREN, "("},
+        {token.IDENT, "five"},
         {token.COMMA, ","},
+        {token.IDENT, "ten"},
+        {token.RIGHTPAREN, ")"},
         {token.SEMICOLON, ";"},
         {token.EOF, ""},
+
     }
 
     l := New(input)
@@ -31,12 +68,12 @@ func TestNextToken(t *testing.T){
 
         if tok.Type != tt.expectedType {
             t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
-                i, tt.expectedType, tok.Type)
+            i, tt.expectedType, tok.Type)
         }
 
         if tok.Literal != tt.expectedLiteral {
             t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
-                i, tt.expectedLiteral, tok.Literal)
+            i, tt.expectedLiteral, tok.Literal)
         }
     }
 }
