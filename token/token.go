@@ -19,6 +19,13 @@ const(
     // Ops
     ASSIGN = "="
     PLUS = "+"
+    MINUS = "-"
+    BANG = "!"
+    ASTERISK = "*"
+    SLASH = "/"
+
+    LESSTHAN = "<"
+    GREATERTHAN = ">"
 
     // Delimiters
     COMMA = ","
@@ -32,11 +39,26 @@ const(
     // Keywords
     FUNCTION = "FUNCTION"
     LET = "LET"
+    TRUE = "TRUE"
+    FALSE = "FALSE"
+    IF = "IF"
+    ELSE = "ELSE"
+    RETURN = "RETURN"
+
+    /// Doubles
+    EQUAL = "=="
+    NOT_EQUAL = "!="
 )
 
+//bank for actual key phrases we will see in the language
 var keywords = map[string]TokenType {
     "fn": FUNCTION,
     "let": LET,
+    "true": TRUE,
+    "false": FALSE,
+    "if": IF,
+    "else": ELSE,
+    "return": RETURN,
 }
 
 //function looks in the keywords table *above* to check if the current indentifier is actually a keyword.

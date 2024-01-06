@@ -6,6 +6,7 @@ import (
     "github.com/JakeNorman007/interpreter/token"
 )
 
+//Test case for the lexer
 func TestNextToken(t *testing.T){
     input := `let five = 5;
 
@@ -15,7 +16,18 @@ func TestNextToken(t *testing.T){
                 x + y;
               };
 
-              let result = add(five, ten);` 
+              let result = add(five, ten);
+              !-/*5;
+              5 < 10 > 5;
+
+              if (5 < 10) {
+                return true; 
+              } else {
+                return false;
+              }
+
+              15 == 15;
+              13 != 9;` 
 
     tests := []struct{
         expectedType    token.TokenType
@@ -56,6 +68,43 @@ func TestNextToken(t *testing.T){
         {token.COMMA, ","},
         {token.IDENT, "ten"},
         {token.RIGHTPAREN, ")"},
+        {token.SEMICOLON, ";"},
+        {token.BANG, "!"},
+        {token.MINUS, "-"},
+        {token.SLASH, "/"},
+        {token.ASTERISK, "*"},
+        {token.INT, "5"},
+        {token.SEMICOLON, ";"},
+        {token.INT, "5"},
+        {token.LESSTHAN, "<"},
+        {token.INT, "10"},
+        {token.GREATERTHAN, ">"},
+        {token.INT, "5"},
+        {token.SEMICOLON, ";"},
+        {token.IF, "if"},
+        {token.LEFTPAREN, "("},
+        {token.INT, "5"},
+        {token.LESSTHAN, "<"},
+        {token.INT, "10"},
+        {token.RIGHTPAREN, ")"},
+        {token.LEFTBRACE, "{"},
+        {token.RETURN, "return"},
+        {token.TRUE, "true"},
+        {token.SEMICOLON, ";"},
+        {token.RIGHTBRACE, "}"},
+        {token.ELSE, "else"},
+        {token.LEFTBRACE, "{"},
+        {token.RETURN, "return"},
+        {token.FALSE, "false"},
+        {token.SEMICOLON, ";"},
+        {token.RIGHTBRACE, "}"},
+        {token.INT, "15"},
+        {token.EQUAL, "=="},
+        {token.INT, "15"},
+        {token.SEMICOLON, ";"},
+        {token.INT, "13"},
+        {token.NOT_EQUAL, "!="},
+        {token.INT, "9"},
         {token.SEMICOLON, ";"},
         {token.EOF, ""},
 

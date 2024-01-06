@@ -36,9 +36,34 @@ func (l *Lexer) readChar() {
 func (l *Lexer) NextToken() token.Token {
     var tok token.Token
 
+    //in case we come across whitespace, which shouldn't throw an error this function skips it when
+    //it's being read by the lexer.
+    l.eatWhitespace()
+
     switch l.ch {
     case '=':
-        tok = newToken(token.ASSIGN, l.ch)
+        if l.peepChar() == '=' {
+            //saving l.ch in a local variable so when we check the next character I don't lose the first
+            //i.e. saves = so when it peeps =, the first = isn't overwritten by =, and becomes the assignment
+            //token
+            ch := l.ch
+            l.readChar()
+            tok = token.Token{Type: token.EQUAL, Literal: string(ch) + string(l.ch)}
+        } else {
+            tok = newToken(token.ASSIGN, l.ch)
+        }
+
+    case '!':
+        if l.peepChar() == '=' {
+            //saving l.ch in a local variable so when we check the next character I don't lose the first
+            //i.e. saves ! so when it peeps = ! isn't overwritten by =
+            ch := l.ch
+            l.readChar()
+            tok = token.Token{Type: token.NOT_EQUAL, Literal: string(ch) + string(l.ch)}
+        } else {
+            tok = newToken(token.BANG, l.ch)
+        }
+
     case ';':
         tok = newToken(token.SEMICOLON, l.ch)
     case '(':
@@ -53,6 +78,16 @@ func (l *Lexer) NextToken() token.Token {
         tok = newToken(token.LEFTBRACE, l.ch)
     case '}':
         tok = newToken(token.RIGHTBRACE, l.ch)
+    case '-':
+        tok = newToken(token.MINUS, l.ch)
+    case '*':
+        tok = newToken(token.ASTERISK, l.ch)
+    case '/':
+        tok = newToken(token.SLASH, l.ch)
+    case '<':
+        tok = newToken(token.LESSTHAN, l.ch)
+    case '>':
+        tok = newToken(token.GREATERTHAN, l.ch)
     case 0:
         tok.Literal = ""
         tok.Type = token.EOF
@@ -64,6 +99,10 @@ func (l *Lexer) NextToken() token.Token {
             tok.Literal = l.readIdentifier()
             tok.Type = token.LookupIdent(tok.Literal)
             return tok
+        } else if isDigit(l.ch) {
+           tok.Type = token.INT
+           tok.Literal = l.readNumber()
+           return tok
         } else {
             tok = newToken(token.ILLEGAL, l.ch)
         }
@@ -71,6 +110,32 @@ func (l *Lexer) NextToken() token.Token {
 
     l.readChar()
     return tok
+}
+
+//similar to readIndetifier, but it will read if it's a number
+func (l *Lexer) readNumber() string {
+    position := l.position
+    for isDigit(l.ch) {
+        l.readChar()
+    }
+
+    return l.input[position:l.position]
+}
+
+//similar to what is in the above comment, check if what the lexer is reading is actually a number
+//basically the number version of isLetter
+func isDigit(ch byte) bool {
+    return '0' <= ch && ch <= '9'
+    //TODO: add other number types. Floats, hexadecimal, octs. For now it's not supported. Will add later!!
+}
+
+//eat whitespace function that ignores a read if it's a whitespace. In doing this it will not throw an error
+//and the lexer will just move past it to the next character.
+//includes not only whitespace, but regex returns as well
+func (l *Lexer) eatWhitespace() {
+    for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+        l.readChar()
+    }
 }
 
 //newToken initializes the tokens, see NextToken cases to connect the dots, takes in a token type, followed by
@@ -97,3 +162,13 @@ func isLetter(ch byte) bool {
     return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
+//peepChar i s a function that works like readChar, but does not incriment the position being read, instead it just looks ahead
+//this helps with things like == for equal to or != for not equal to.
+//if it peeps ahead and say it is ==, then it will know based off the token that it is lexing == and will then read it as so
+func (l *Lexer) peepChar() byte {
+    if l.readPosition >= len(l.input) {
+        return 0
+    } else {
+        return l.input[l.readPosition]
+    }
+}
