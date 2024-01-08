@@ -8,7 +8,7 @@ import (
     "github.com/JakeNorman007/interpreter/token"
 )
 
-const PROMPT = ">> "
+const PROMPT = "Elliott >> "
 
 func Start(in io.Reader, out io.Writer) {
     scanner := bufio.NewScanner(in)
@@ -24,7 +24,7 @@ func Start(in io.Reader, out io.Writer) {
         l := lexer.New(line)
 
         for tok := l.NextToken(); tok.Type != token.EOF; tok = l.NextToken() {
-            fmt.Printf("%+v/n", tok)
+            fmt.Printf("%+v\n", tok)
         }
     }
 
