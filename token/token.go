@@ -52,7 +52,7 @@ const(
 
 //bank for actual key phrases we will see in the language
 var keywords = map[string]TokenType {
-    "fn": FUNCTION,
+    "func": FUNCTION,
     "let": LET,
     "true": TRUE,
     "false": FALSE,

@@ -8,7 +8,7 @@ import (
     "github.com/JakeNorman007/interpreter/token"
 )
 
-const PROMPT = "Elliott >> "
+const PROMPT = "[El]>> "
 
 func Start(in io.Reader, out io.Writer) {
     scanner := bufio.NewScanner(in)
