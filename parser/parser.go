@@ -1,9 +1,11 @@
 package parser
 
 import (
-    "github.com/JakeNorman007/interpreter/ast"
-    "github.com/JakeNorman007/interpreter/lexer"
-    "github.com/JakeNorman007/interpreter/token"
+	"fmt"
+
+	"github.com/JakeNorman007/interpreter/ast"
+	"github.com/JakeNorman007/interpreter/lexer"
+	"github.com/JakeNorman007/interpreter/token"
 )
 
 //parser calls the lexer and holds two values of its own like the lexer itself
@@ -12,17 +14,27 @@ type Parser struct {
     l *lexer.Lexer
     curToken    token.Token
     peepToken   token.Token
+    errors      []string
 }
 
 //function that is a new Parser instance, it calls the next token constantly
 func New(l *lexer.Lexer) *Parser {
-    p := &Parser{l: l}
+    p := &Parser{l: l, errors: []string{},}
 
     //reading two tokens, so the current token and peeped token are set
     p.nextToken()
     p.nextToken()
 
     return p
+}
+
+func (p *Parser) Errors() []string {
+    return p.errors
+}
+
+func (p *Parser) peepError(t token.TokenType) {
+    msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peepToken.Type)
+    p.errors = append(p.errors, msg)
 }
 
 func (p *Parser) nextToken() {
@@ -89,6 +101,7 @@ func (p *Parser) expectPeep(t token.TokenType) bool {
         p.nextToken()
         return true
     } else {
+        p.peepError(t)
         return false
     }
 }
