@@ -7,7 +7,10 @@ import (
     "github.com/JakeNorman007/interpreter/repl"
 )
 
-//not the actual logo
+//this is the interpreter from the terminal, has a logo and in the main function it will error if something goes
+//wrong then it prints the logo.
+//finally, repl.Start does just that and takes user input and spits out at this moment the tokens and their literals
+//in a struct/ key value form.
 const logo = `
  ____  _  _  _       _    _
 |  __|| || |(_)     | |  | |
