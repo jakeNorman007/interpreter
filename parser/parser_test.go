@@ -6,11 +6,12 @@ import (
     "github.com/JakeNorman007/interpreter/lexer"
 )
 
+//parser test for let statement currently
 func TestLetStatement(t *testing.T) {
     input :=`
-            let x 5;
-            let = 10;
-            let 838383;
+            let x = 5;
+            let y = 10;
+            let foo = 838383;
             `
 
     l := lexer.New(input)
@@ -81,3 +82,67 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 
     return true
 }
+
+//parser test for return statements
+func TestReturnStatements(t *testing.T) {
+    input := `
+            return 5;
+            return 14;
+            return 394857584;
+            `
+
+    l := lexer.New(input)
+    p := New(l)
+
+    program := p.ParseProgram()
+    checkParserErrors(t, p)
+
+    if len(program.Statements) != 3 {
+        t.Fatalf("program.Statements does not contain 3 statements. got=%d", len(program.Statements))
+    }
+
+    for _, stmt := range program.Statements {
+        returnStmt, ok := stmt.(*ast.ReturnStatement)
+        if !ok {
+            t.Errorf("stmt not *ast.ReturnStatement, got=%T", stmt)
+            continue
+        }
+        if returnStmt.TokenLiteral() != "return" {
+            t.Errorf("returnStmt.TokenLiteral is not 'return', got=%q", returnStmt.TokenLiteral())
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
