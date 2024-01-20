@@ -8,10 +8,12 @@ import (
 )
 
 type Parser struct {
-    l *lexer.Lexer
-    curToken    token.Token
-    peepToken   token.Token
-    errors      []string
+    l               *lexer.Lexer
+    curToken        token.Token
+    peepToken       token.Token
+    errors          []string
+    prefixParseFns  map[token.TokenType]prefixParseFn
+    infixParseFns   map[token.TokenType]infixParseFn
 }
 
 func New(l *lexer.Lexer) *Parser {
@@ -60,7 +62,7 @@ func (p *Parser) parseStatement() ast.Statement {
     case token.RETURN:
         return p.parseReturnStatement()
     default:
-        return nil
+        return p.parseExpressionStatement()
     }
 }
 
@@ -97,6 +99,11 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
     return stmt
 }
 
+//TODO: finish this function
+func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+    return nil
+}
+
 func (p *Parser) curTokenIs(t token.TokenType) bool {
     return p.curToken.Type == t
 }
@@ -114,3 +121,23 @@ func (p *Parser) expectPeep(t token.TokenType) bool {
         return false
     }
 }
+
+//prefix, infix parsing
+//maps are added in the Parser struct up top.
+//prefix and infix helper methods as well, they add entries to the maps
+type (
+    prefixParseFn func() ast.Expression
+    infixParseFn func(ast.Expression) ast.Expression
+)
+
+func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
+    p.prefixParseFns[tokenType] = fn
+}
+
+func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
+    p.infixParseFns[tokenType] = fn
+}
+
+
+
+
