@@ -101,7 +101,15 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 
 //TODO: finish this function
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
-    return nil
+    stmt := &ast.ExpressionStatement{Token: p.curToken}
+
+    stmt.Expression = p.parseExpression(LOWEST)
+
+    if p.peepTokenIs(token.SEMICOLON) {
+        p.nextToken()
+    }
+
+    return stmt
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {
