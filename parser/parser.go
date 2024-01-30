@@ -7,6 +7,17 @@ import (
 	"github.com/JakeNorman007/interpreter/token"
 )
 
+const (
+    _ int = iota
+    LOWEST
+    EQUALS          //==
+    LESSGREATER     //> or <
+    SUM             //+
+    PRODUCT         // *
+    PREFIX          //-X or !X
+    CALL            //myFunction(x)
+)
+
 type Parser struct {
     l               *lexer.Lexer
     curToken        token.Token
@@ -22,7 +33,14 @@ func New(l *lexer.Lexer) *Parser {
     p.nextToken()
     p.nextToken()
 
+    p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
+    p.registerPrefix(token.IDENT, p.parseIdentifier)
+
     return p
+}
+
+func (p *Parser) parseIdentifier() ast.Expression {
+    return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 }
 
 func (p *Parser) Errors() []string {
@@ -99,7 +117,6 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
     return stmt
 }
 
-//TODO: finish this function
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
     stmt := &ast.ExpressionStatement{Token: p.curToken}
 
@@ -110,6 +127,17 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
     }
 
     return stmt
+}
+
+func (p *Parser) parseExpression(precedence int) ast.Expression {
+    prefix := p.prefixParseFns[p.curToken.Type]
+    if prefix == nil {
+        return nil
+    }
+
+    leftExp := prefix()
+
+    return leftExp
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {
