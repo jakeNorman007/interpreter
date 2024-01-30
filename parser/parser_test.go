@@ -170,10 +170,10 @@ func TestIntegerLiteral(t *testing.T) {
     }
     
     if literal.Value != 6 {
-        t.Errorf("literal.Value not %d, got=%s", 6, literal.Value)
+        t.Errorf("literal.Value not %d, got=%d", 6, literal.Value)
     }
 
-    if literal.TokenLiteral() != 6 {
+    if literal.TokenLiteral() != "6" {
         t.Errorf("literal.TokenLiteral is not %s, got=%s", "6", literal.TokenLiteral())
     }
 }
