@@ -242,6 +242,26 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
     return true
 }
 
+func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
+    ident, ok := exp.(*ast.Identifier)
+    if !ok {
+        t.Errorf("exp is not *ast.Identifier, got=%T", exp)
+        return false
+    }
+
+    if ident.Value != value {
+        t.Errorf("ident.Value is not %s, got=%s", value, ident.Value)
+        return false
+    }
+
+    if ident.TokenLiteral() != value {
+        t.Errorf("ident.TokenLiteral is not %s, got=%s", value, ident.TokenLiteral())
+        return false
+    }
+
+    return true
+}
+
 //Infix expressions test
 func TestParsingInfixExpressions(t *testing.T) {
     infixTests := []struct {

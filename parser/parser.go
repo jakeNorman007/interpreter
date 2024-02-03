@@ -2,7 +2,7 @@ package parser
 
 import (
 	"fmt"
-    "strconv"
+	"strconv"
 	"github.com/JakeNorman007/interpreter/ast"
 	"github.com/JakeNorman007/interpreter/lexer"
 	"github.com/JakeNorman007/interpreter/token"
