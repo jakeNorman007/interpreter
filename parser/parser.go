@@ -37,6 +37,7 @@ var precedences = map[token.TokenType]int {
     token.MINUS:        SUM,
     token.SLASH:        PRODUCT,
     token.ASTERISK:     PRODUCT,
+    token.LEFTPAREN:    CALL,
 }
 
 func (p *Parser) peepPrecedence() int {
@@ -81,8 +82,39 @@ func New(l *lexer.Lexer) *Parser {
     p.registerInfix(token.NOT_EQUAL, p.parseInfixExpression)
     p.registerInfix(token.LESSTHAN, p.parseInfixExpression)
     p.registerInfix(token.GREATERTHAN, p.parseInfixExpression)
+    p.registerInfix(token.LEFTPAREN, p.parseCallExpression)
 
     return p
+}
+
+func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
+    exp := &ast.CallExpression{Token: p.curToken, Function: function}
+    exp.Arguments = p.parseCallArguments()
+    return exp
+}
+
+func (p *Parser) parseCallArguments() []ast.Expression {
+    args := []ast.Expression{}
+
+    if p.peepTokenIs(token.RIGHTPAREN) {
+        p.nextToken()
+        return args
+    }
+
+    p.nextToken()
+    args = append(args, p.parseExpression(LOWEST))
+
+    for p.peepTokenIs(token.COMMA) {
+        p.nextToken()
+        p.nextToken()
+        args = append(args, p.parseExpression(LOWEST))
+    }
+
+    if !p.expectPeep(token.RIGHTPAREN) {
+        return nil
+    }
+
+    return args
 }
 
 func (p *Parser) parseGroupedExpression() ast.Expression {
@@ -173,7 +205,11 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
         return nil
     }
 
-    for !p.curTokenIs(token.SEMICOLON) {
+    p.nextToken()
+
+    stmt.Value = p.parseExpression(LOWEST)
+
+    if p.peepTokenIs(token.SEMICOLON) {
         p.nextToken()
     }
 
@@ -185,8 +221,9 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 
     p.nextToken()
 
-    //TODO: skipping expressions until a semicolon is hit
-    for !p.curTokenIs(token.SEMICOLON) {
+    stmt.ReturnValue = p.parseExpression(LOWEST)
+
+    if p.peepTokenIs(token.SEMICOLON) {
         p.nextToken()
     }
 
