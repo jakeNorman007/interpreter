@@ -6,9 +6,10 @@ import (
     "io"
     "github.com/JakeNorman007/interpreter/lexer"
     "github.com/JakeNorman007/interpreter/parser"
+    "github.com/JakeNorman007/interpreter/evaluator"
 )
 
-const PROMPT = "[El]>> "
+const PROMPT = "[el]>> "
 
 func Start(in io.Reader, out io.Writer) {
     scanner := bufio.NewScanner(in)
@@ -29,9 +30,12 @@ func Start(in io.Reader, out io.Writer) {
             printParseErrors(out, p.Errors())
             continue
         }
-
-        io.WriteString(out, program.String())
-        io.WriteString(out, "\n")
+        
+        evaluated := evaluator.Eval(program)
+        if evaluated != nil {
+            io.WriteString(out, program.String())
+            io.WriteString(out, "\n")
+        }
     }
 
 }
