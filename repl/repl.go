@@ -1,15 +1,15 @@
 package repl
 
 import (
-    "bufio"
-    "fmt"
     "io"
+    "fmt"
+    "bufio"
     "github.com/JakeNorman007/interpreter/lexer"
     "github.com/JakeNorman007/interpreter/parser"
     "github.com/JakeNorman007/interpreter/evaluator"
 )
 
-const PROMPT = "[el]>> "
+const PROMPT = "el>> "
 
 func Start(in io.Reader, out io.Writer) {
     scanner := bufio.NewScanner(in)
