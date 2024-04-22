@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-    "github.com/JakeNorman007/interpreter/ast"
-    "github.com/JakeNorman007/interpreter/object"
+	"github.com/JakeNorman007/interpreter/ast"
+	"github.com/JakeNorman007/interpreter/object"
 )
 
 var (
@@ -15,8 +15,13 @@ func Eval(node ast.Node) object.Object {
     switch node := node.(type) {
     case *ast.Program:
         return evalProgram(node)
+    case *ast.BlockStatement:
+        return evalBlockStatement(node)
     case *ast.ExpressionStatement:
         return Eval(node.Expression)
+    case *ast.ReturnStatement:
+        val := Eval(node.ReturnValue)
+        return &object.ReturnValue{Value: val}
     case *ast.IntegerLiteral:
         return &object.Integer{Value: node.Value}
     case *ast.Boolean:
@@ -28,13 +33,8 @@ func Eval(node ast.Node) object.Object {
         left := Eval(node.Left)
         right := Eval(node.Right)
         return evalInfixExpression(node.Operator, left, right)
-    case *ast.BlockStatement:
-        return evalBlockStatement(node)
     case *ast.IfExpression:
         return evalIfExpression(node)
-        case *ast.ReturnStatement:
-            val := Eval(node.ReturnValue)
-            return &object.ReturnValue{Value: val}
     }
 
     return nil
@@ -108,7 +108,7 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
     case "-":
         return evalMinusPrefixOperatorExpression(right)
     default:
-        return NULL
+        return NULL 
     }
 }
 
@@ -127,7 +127,7 @@ func evalBangOperatorExpression(right object.Object) object.Object {
 
 func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
     if right.Type() != object.INTEGER_OBJ {
-        return NULL
+        return NULL 
     }
 
     value := right.(*object.Integer).Value
@@ -143,7 +143,7 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
     case operator == "!=":
         return nativeBoolToBooleanObject(left != right)
     default:
-        return NULL
+        return NULL 
     }
 }
 
@@ -169,6 +169,6 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
     case "!=":
         return nativeBoolToBooleanObject(leftVal != rightVal)
     default:
-        return NULL
+        return NULL 
     }
 }
