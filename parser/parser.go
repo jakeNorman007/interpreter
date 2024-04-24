@@ -14,9 +14,9 @@ const (
     EQUALS          //==
     LESSGREATER     //> or <
     SUM             //+
-    PRODUCT         // *
+    PRODUCT         //*
     PREFIX          //-X or !X
-    CALL            //myFunction(x)
+    CALL            //myFunctionName(x)
 )
 
 type Parser struct {

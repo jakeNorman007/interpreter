@@ -2,7 +2,6 @@ package lexer
 
 import (
     "testing"
-
     "github.com/JakeNorman007/interpreter/token"
 )
 

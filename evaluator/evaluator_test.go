@@ -1,10 +1,10 @@
 package evaluator
 
 import (
+    "testing"
     "github.com/JakeNorman007/interpreter/lexer"
     "github.com/JakeNorman007/interpreter/object"
     "github.com/JakeNorman007/interpreter/parser"
-    "testing"
 )
 
 func TestEvalIntegerExpression(t *testing.T) {
@@ -212,6 +212,54 @@ func TestLetStatements(t *testing.T) {
     for _, tt := range tests {
         testIntegerObject(t, testEval(tt.input), tt.expected)
     }
+}
+
+func TestFunctionObject(t *testing.T) {
+    input := "func(x) { x + 2 };"
+
+    evaluated := testEval(input)
+    fn, ok := evaluated.(*object.Function)
+    if !ok {
+        t.Fatalf("object is not a Function, got=%T (%+v)", evaluated, evaluated)
+    }
+
+    if len(fn.Parameters) != 1 {
+        t.Fatalf("function has wrong parameters, Parameters=%+v", fn.Parameters)
+    }
+
+    if fn.Parameters[0].String() != "x" {
+        t.Fatalf("parameter is not 'x', got=%q", fn.Parameters[0])
+    }
+
+    expectedBody := "(x + 2)"
+
+    if fn.Body.String() != expectedBody {
+        t.Fatalf("body is not %q, got=%q", expectedBody, fn.Body.String())
+    }
+}
+
+func TestFunctionApplication(t *testing.T) {
+    tests := []struct {
+        input       string
+        expected    int64
+    }{
+        {"let identity = func(x) { x; }; identity(5);", 5},
+        {"let identity = func(x) { return x; }; identity(5);", 5},
+        {"let mult = func(x) { x * 2; }; mult(5);", 10},
+        {"let div = func(x, y) { x / y; }; div(10, 2);", 5},
+        {"let yaMomma = func(x, y) { x * y; }; yaMomma(5, yaMomma(5, 5));", 125},
+        {"func(x) { x; }; (5);", 5},
+    }
+
+    for _, tt := range tests {
+        testIntegerObject(t, testEval(tt.input), tt.expected)
+    }
+}
+
+func TestClosures(t *testing.T) {
+    input := "let newFunc = func(x) { func(y) { x + y }; }; let addTwo = newFunc(2); addTwo(2);"
+
+    testIntegerObject(t, testEval(input), 4)
 }
 
 func testNullObject(t *testing.T, obj object.Object) bool {

@@ -3,7 +3,6 @@ package parser
 import (
 	"fmt"
 	"testing"
-
 	"github.com/JakeNorman007/interpreter/ast"
 	"github.com/JakeNorman007/interpreter/lexer"
 )

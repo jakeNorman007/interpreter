@@ -50,7 +50,6 @@ const(
     NOT_EQUAL = "!="
 )
 
-//bank for actual key phrases we will see in the language
 var keywords = map[string]TokenType {
     "func": FUNCTION,
     "let": LET,
@@ -61,9 +60,6 @@ var keywords = map[string]TokenType {
     "return": RETURN,
 }
 
-//function looks in the keywords table *above* to check if the current indentifier is actually a keyword.
-//if yes it returns the TokenType constant of the keyword, if no it goes back to token.IDENT, the token
-//type for all indetifiers we have defined
 func LookupIdent(ident string) TokenType {
     if tok, ok := keywords[ident]; ok {
         return tok

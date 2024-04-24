@@ -1,10 +1,9 @@
 package repl
 
 import (
-	"bufio"
-	"fmt"
 	"io"
-
+	"fmt"
+	"bufio"
 	"github.com/JakeNorman007/interpreter/evaluator"
 	"github.com/JakeNorman007/interpreter/lexer"
 	"github.com/JakeNorman007/interpreter/object"
