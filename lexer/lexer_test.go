@@ -11,7 +11,7 @@ func TestNextToken(t *testing.T){
 
               let ten = 10;
 
-              let add = fn(x,y) {
+              let add = func(x,y) {
                 x + y;
               };
 
@@ -26,7 +26,9 @@ func TestNextToken(t *testing.T){
               }
 
               15 == 15;
-              13 != 9;` 
+              13 != 9;
+
+              ` 
 
     tests := []struct{
         expectedType    token.TokenType
@@ -45,7 +47,7 @@ func TestNextToken(t *testing.T){
         {token.LET, "let"},
         {token.IDENT, "add"},
         {token.ASSIGN, "="},
-        {token.FUNCTION, "fn"},
+        {token.FUNCTION, "func"},
         {token.LEFTPAREN, "("},
         {token.IDENT, "x"},
         {token.COMMA, ","},

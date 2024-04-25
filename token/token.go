@@ -48,6 +48,9 @@ const(
     /// Doubles
     EQUAL = "=="
     NOT_EQUAL = "!="
+
+    /// String
+    STRING = "STRING"
 )
 
 var keywords = map[string]TokenType {
