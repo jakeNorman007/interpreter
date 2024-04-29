@@ -1,8 +1,8 @@
 package main
 
 import (
-    "fmt"
     "os"
+    "fmt"
     "os/user"
     "github.com/JakeNorman007/interpreter/repl"
 )
