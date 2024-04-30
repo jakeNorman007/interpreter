@@ -35,6 +35,8 @@ const(
     RIGHTPAREN = ")"
     LEFTBRACE = "{"
     RIGHTBRACE = "}"
+    LEFTBRACKET = "["
+    RIGHTBRACKET = "]"
 
     // Keywords
     FUNCTION = "FUNCTION"

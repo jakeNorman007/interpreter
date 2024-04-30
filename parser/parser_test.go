@@ -41,6 +41,29 @@ func TestLetStatements(t *testing.T) {
     }
 }
 
+func TestParsingArrayLiterals(t *testing.T) {
+    input := "[2, 3 * 4, 3 + 9]"
+
+    l := lexer.New(input)
+    p := New(l)
+    program := p.ParseProgram()
+    checkParserErrors(t, p)
+
+    stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+    array, ok := stmt.Expression.(*ast.ArrayLiteral)
+    if !ok {
+        t.Fatalf("exp is not ast.ArrayLiteral, got=%T", stmt.Expression)
+    }
+
+    if len(array.Elements) != 3 {
+        t.Fatalf("len(array.Elements) is not 3, got=%d", len(array.Elements))
+    }
+
+    testIntegerLiteral(t, array.Elements[0], 2)
+    testInfixExpression(t, array.Elements[1], 3, "*", 4)
+    testInfixExpression(t, array.Elements[2], 3, "+", 9)
+}
+
 func checkParserErrors(t *testing.T, p *Parser) {
     errors := p.Errors()
 
