@@ -28,11 +28,12 @@ func TestNextToken(t *testing.T){
               15 == 15;
               13 != 9;
               [3, 4];
+              {"foo": "bar"}
               ` 
 
     tests := []struct{
-        expectedType    token.TokenType
-        expectedLiteral string
+        expectedType        token.TokenType
+        expectedLiteral     string
     }{
         {token.LET, "let"},
         {token.IDENT, "five"},
@@ -113,8 +114,12 @@ func TestNextToken(t *testing.T){
         {token.INT, "4"},
         {token.RIGHTBRACKET, "]"},
         {token.SEMICOLON, ";"},
+        {token.LEFTBRACE, "{"},
+        {token.STRING, "foo"},
+        {token.COLON, ":"},
+        {token.STRING, "bar"},
+        {token.RIGHTBRACE, "}"},
         {token.EOF, ""},
-
     }
 
     l := New(input)
