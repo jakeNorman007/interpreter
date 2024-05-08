@@ -186,7 +186,7 @@ func TestErrorHandling(t *testing.T) {
             "unknown operator: STRING - STRING",
         },
         {
-            `{"name": "Elliott"}[fn(x) { x }];`,
+            `{"name": "Elliott"}[func(x) { x }];`,
             "unusable as hash key: FUNCTION",
         },
     }
@@ -377,7 +377,7 @@ func TestArrayIndexExpression(t *testing.T) {
 }
 
 func TestHashLiterals(t *testing.T) {
-    input := `let two = "two"
+    input := `let two = "two";
     {
         "one": 10 - 9,
         two: 1 + 1,
