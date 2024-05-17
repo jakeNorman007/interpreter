@@ -479,9 +479,6 @@ func (p *Parser) expectPeep(t token.TokenType) bool {
     }
 }
 
-//prefix, infix parsing
-//maps are added in the Parser struct up top.
-//prefix and infix helper methods as well, they add entries to the maps
 type (
     prefixParseFn func() ast.Expression
     infixParseFn func(ast.Expression) ast.Expression
@@ -511,4 +508,3 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType) {
     msg := fmt.Sprintf("no prefix parse function for %s found", t)
     p.errors = append(p.errors, msg)
 }
-

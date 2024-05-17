@@ -3,10 +3,10 @@ package lexer
 import "github.com/JakeNorman007/interpreter/token"
 
 type Lexer struct {
-    input           string //as name suggests this is the input itself 
-    position        int //current position of the input 
-    readPosition    int //current reading position of the input (the character following the position) 
-    ch              byte //this is the current character that is being read
+    input           string
+    position        int
+    readPosition    int
+    ch              byte
 }
 
 func New(input string) *Lexer {
@@ -40,7 +40,6 @@ func (l *Lexer) NextToken() token.Token {
         } else {
             tok = newToken(token.ASSIGN, l.ch)
         }
-
     case '!':
         if l.peepChar() == '=' {
             ch := l.ch
@@ -49,7 +48,6 @@ func (l *Lexer) NextToken() token.Token {
         } else {
             tok = newToken(token.BANG, l.ch)
         }
-
     case ';':
         tok = newToken(token.SEMICOLON, l.ch)
     case '(':
@@ -128,7 +126,6 @@ func (l *Lexer) readString() string {
 
 func isDigit(ch byte) bool {
     return '0' <= ch && ch <= '9'
-    //TODO: add other number types. Floats, hexadecimal, octs. For now it's not supported. Will add later!!
 }
 
 func (l *Lexer) eatWhitespace() {

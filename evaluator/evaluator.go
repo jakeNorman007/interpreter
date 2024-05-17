@@ -392,4 +392,3 @@ func isError(obj object.Object) bool {
 
     return false
 }
-

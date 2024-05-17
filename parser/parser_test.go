@@ -127,7 +127,6 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
     return true
 }
 
-//parser test for return statements
 func TestReturnStatements(t *testing.T) {
     input := `
             return 5;
@@ -157,7 +156,6 @@ func TestReturnStatements(t *testing.T) {
     }
 }
 
-//parser test for identifier expressions
 func TestIdentifierExpression(t *testing.T) {
     input := `foobarbaz;`
 
@@ -190,7 +188,6 @@ func TestIdentifierExpression(t *testing.T) {
     }
 }
 
-//parser test for integer literals ex. 5; 10; 55; etc.
 func TestIntegerLiteral(t *testing.T) {
     input := "6;"
 
@@ -222,7 +219,6 @@ func TestIntegerLiteral(t *testing.T) {
     }
 }
 
-//parser test for prefix expressions - or !
 func TestParsingPrefixExpressions(t *testing.T) {
     prefixTests := []struct {
         input           string
@@ -267,7 +263,6 @@ func TestParsingPrefixExpressions(t *testing.T) {
     }
 }
 
-//testIntegerLiteral helper function to use with PrefixExpression test
 func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
     integ, ok := il.(*ast.IntegerLiteral)
     if !ok {
@@ -308,7 +303,6 @@ func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
     return true
 }
 
-//Infix expressions test
 func TestParsingInfixExpressions(t *testing.T) {
     infixTests := []struct {
         input           string
@@ -359,7 +353,6 @@ func TestParsingInfixExpressions(t *testing.T) {
     }
 }
 
-//Operator precedence test
 func TestOperatorPrecedenceParsing(t *testing.T) {
     tests := []struct {
         input       string
@@ -591,7 +584,6 @@ func TestParsingHashLiteralsWithExpressions(t *testing.T) {
     }
 }
 
-//testLiteralExpression helper function
 func testLiteralExpression(
     t *testing.T,
     exp ast.Expression,
@@ -611,7 +603,6 @@ func testLiteralExpression(
     return false
 }
 
-//testInfixExpression helper function
 func testInfixExpression(t *testing.T, exp ast.Expression, left interface{}, operator string, right interface{}) bool {
     opExp, ok := exp.(*ast.InfixExpression)
     if !ok {
@@ -635,7 +626,6 @@ func testInfixExpression(t *testing.T, exp ast.Expression, left interface{}, ope
     return true
 }
 
-//test for Boolean expressions
 func TestBooleanLiteral(t *testing.T) {
     tests := []struct {
         input           string
@@ -910,9 +900,3 @@ func TestStringLiteral(t *testing.T) {
         t.Errorf("literal.Value is not %q, got=%q", "Hello World", literal.Value)
     }
 }
-
-
-
-
-
-

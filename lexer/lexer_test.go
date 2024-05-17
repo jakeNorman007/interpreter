@@ -5,7 +5,6 @@ import (
     "github.com/JakeNorman007/interpreter/token"
 )
 
-//Test case for the lexer
 func TestNextToken(t *testing.T){
     input := `let five = 5;
 

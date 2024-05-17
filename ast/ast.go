@@ -6,12 +6,6 @@ import (
 	"github.com/JakeNorman007/interpreter/token"
 )
 
-//***********************AST Summary************************************
-//*                                                                    *
-//*  *ast.Program --> *ast.LetStatement --> Name --> *ast.Identifier   *
-//*                                     \__> Value --> *ast.Expression *
-//**********************************************************************
-
 type Node interface {
     TokenLiteral() string
     String()       string
@@ -39,7 +33,6 @@ func (p *Program) TokenLiteral() string {
     }
 }
 
-//String function and the implimenting of it with Expression statements, Let statements and Return statements
 func (p *Program) String() string {
     var out bytes.Buffer
 
@@ -88,7 +81,6 @@ func (es *ExpressionStatement) String() string {
     return ""
 }
 
-//Let Statement ast structure
 type LetStatement struct {
     Token   token.Token //token.LET token
     Name    *Identifier
@@ -98,7 +90,6 @@ type LetStatement struct {
 func (ls * LetStatement) statementNode(){}
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
-//Identifier ast structure
 type Identifier struct {
     Token   token.Token //token.IDENT token
     Value   string
@@ -108,7 +99,6 @@ func (i *Identifier) expressionNode(){}
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 func (i *Identifier) String() string { return i.Value }
 
-//Return statement ast structure
 type ReturnStatement struct {
     Token       token.Token //token.RETURN token
     ReturnValue Expression
@@ -117,7 +107,6 @@ type ReturnStatement struct {
 func (rs *ReturnStatement) statementNode(){}
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
-//Expression statement ast structure
 type ExpressionStatement struct {
     Token       token.Token //the first token present in the expression
     Expression  Expression
@@ -126,7 +115,6 @@ type ExpressionStatement struct {
 func (es *ExpressionStatement) statementNode(){}
 func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
 
-//Integer literal struct
 type IntegerLiteral struct {
     Token   token.Token
     Value   int64
@@ -136,7 +124,6 @@ func (il *IntegerLiteral) expressionNode(){}
 func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
 func (il *IntegerLiteral) String() string { return il.Token.Literal }
 
-//Prefix Expressions
 type PrefixExpression struct {
     Token       token.Token //prefix token, such as ! or -
     Operator    string
@@ -155,7 +142,6 @@ func (pe *PrefixExpression) String() string {
     return out.String()
 }
 
-//infix expressions
 type InfixExpression struct {
     Token       token.Token
     Left        Expression
@@ -176,7 +162,6 @@ func (oe *InfixExpression) String() string{
     return out.String()
 }
 
-//booleans
 type Boolean struct {
     Token   token.Token
     Value   bool
@@ -186,7 +171,6 @@ func (b *Boolean) expressionNode(){}
 func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
 func (b *Boolean) String() string { return b.Token.Literal }
 
-//ifs
 type IfExpression struct {
     Token           token.Token
     Condition       Expression
@@ -212,7 +196,6 @@ func (ie *IfExpression) String() string {
     return out.String()
 }
 
-//blocks i.e. { something here }
 type BlockStatement struct {
     Token           token.Token
     Statements      []Statement
@@ -230,7 +213,6 @@ func (bs *BlockStatement) String() string {
     return out.String()
 }
 
-//funtion literals
 type FunctionLiteral struct {
     Token       token.Token //this is the func token specifically
     Parameters  []*Identifier
@@ -256,7 +238,6 @@ func (fl *FunctionLiteral) String() string {
     return out.String()
 }
 
-//call expressions, i.e. calling a function
 type CallExpression struct {
     Token       token.Token //left parenthesis token '('
     Function    Expression //either an Identifier or FunctionLiteral
