@@ -8,13 +8,15 @@ import (
 )
 
 const logo = `
- ____  _
-|  __|| |
-| |_  | |
-|  _| | |
-| |__ | | _
-|____||_||_|
+**********************************************
+* EEEEEE EE    EE    EE EEEEEE EEEEEE EEEEEE *
+* EE     EE    EE    EE EE  EE   EE     EE   *
+* EEEE   EE    EE    EE EE  EE   EE     EE   *
+* EE     EE    EE    EE EE  EE   EE     EE   *
+* EEEEEE EEEEE EEEEE EE EEEEEE   EE     EE   * 
+**********************************************
 `
+
 func main() {
      _, err := user.Current()
     if err != nil {
