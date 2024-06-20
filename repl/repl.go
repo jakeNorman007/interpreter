@@ -8,16 +8,19 @@ import (
 	"github.com/JakeNorman007/interpreter/lexer"
 	"github.com/JakeNorman007/interpreter/object"
 	"github.com/JakeNorman007/interpreter/parser"
+    "github.com/charmbracelet/lipgloss"
 )
 
-const PROMPT = "elliott: "
+const PROMPT = "::: "
+
+var logoStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#01FAC6"))
 
 func Start(in io.Reader, out io.Writer) {
     scanner := bufio.NewScanner(in)
     env := object.NewEnvironment()
 
     for {
-        fmt.Printf(PROMPT)
+        fmt.Printf(logoStyle.Render(PROMPT))
         scanned := scanner.Scan()
         if !scanned {
             return
